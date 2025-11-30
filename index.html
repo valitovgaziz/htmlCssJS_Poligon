@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Эффекты бликов на объектах</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #1a2a3a, #0d1b2a);
+        color: #e0e1dd;
+        min-height: 100vh;
+        padding: 2rem;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 3rem;
+        padding: 1rem;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(90deg, #ff9d00, #ffed4e);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 0 15px rgba(255, 157, 0, 0.3);
+      }
+
+      .subtitle {
+        font-size: 1.2rem;
+        opacity: 0.8;
+      }
+
+      .examples-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+      }
+
+      .example-card {
+        background: rgba(16, 29, 44, 0.8);
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .example-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+      }
+
+      .example-title {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        color: #ff9d00;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .example-title i {
+        font-size: 1.1rem;
+      }
+
+      .example-description {
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+        opacity: 0.9;
+      }
+
+      .demo-object {
+        height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        position: relative;
+        overflow: hidden;
+        font-weight: bold;
+        font-size: 1.1rem;
+        cursor: pointer;
+      }
+
+      /* Пример 1: Блик при наведении */
+      .demo-1 {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+      }
+
+      .demo-1:hover::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.4),
+          transparent
+        );
+        animation: shine 0.8s ease;
+      }
+
+      @keyframes shine {
+        0% {
+          left: -100%;
+        }
+        100% {
+          left: 100%;
+        }
+      }
+
+      /* Пример 2: Периодические блики */
+      .demo-2 {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+      }
+
+      .demo-2::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        animation: periodicShine 3s infinite;
+      }
+
+      @keyframes periodicShine {
+        0%,
+        100% {
+          left: -100%;
+        }
+        50% {
+          left: 100%;
+        }
+      }
+
+      /* Пример 3: Тонкий эффект с radial-gradient */
+      .demo-3 {
+        background: radial-gradient(
+            circle at 30% 30%,
+            rgba(255, 255, 255, 0.2) 0%,
+            transparent 50%
+          ),
+          #2c3e50;
+        transition: all 0.5s ease;
+      }
+
+      .demo-3:hover {
+        background: radial-gradient(
+            circle at 70% 70%,
+            rgba(255, 255, 255, 0.3) 0%,
+            transparent 50%
+          ),
+          #2c3e50;
+      }
+
+      /* Пример 4: Блик с JavaScript контролем */
+      .demo-4 {
+        background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        transition: box-shadow 0.3s ease;
+      }
+
+      .demo-4.shining::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 60%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.4),
+          transparent
+        );
+        animation: quickShine 0.6s ease;
+      }
+
+      .demo-4.pulse-glow {
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+      }
+
+      @keyframes quickShine {
+        0% {
+          left: -100%;
+        }
+        100% {
+          left: 100%;
+        }
+      }
+
+      /* Пример 5: Блик для кнопки */
+      .demo-5 {
+        background: linear-gradient(135deg, #2ecc71, #27ae60);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .demo-5::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: rgba(255, 255, 255, 0.1);
+        transform: rotate(45deg);
+        transition: all 0.5s ease;
+        opacity: 0;
+      }
+
+      .demo-5:hover::after {
+        opacity: 1;
+        transform: rotate(45deg) translate(50%, 50%);
+      }
+
+      /* Пример 6: Множественные блики */
+      .demo-6 {
+        background: linear-gradient(135deg, #f39c12, #e67e22);
+      }
+
+      .demo-6::before,
+      .demo-6::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 30%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.4),
+          transparent
+        );
+        animation: multipleShine 4s infinite;
+      }
+
+      .demo-6::after {
+        animation-delay: 1s;
+        width: 20%;
+      }
+
+      @keyframes multipleShine {
+        0%,
+        100% {
+          left: -100%;
+        }
+        50% {
+          left: 100%;
+        }
+      }
+
+      .code-block {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 6px;
+        padding: 1rem;
+        font-family: "Courier New", monospace;
+        font-size: 0.85rem;
+        overflow-x: auto;
+        margin-top: 1rem;
+        border-left: 3px solid #ff9d00;
+      }
+
+      footer {
+        text-align: center;
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        opacity: 0.7;
+      }
+
+      .instructions {
+        background: rgba(255, 157, 0, 0.1);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border-left: 4px solid #ff9d00;
+      }
+
+      .instructions h2 {
+        margin-bottom: 0.5rem;
+        color: #ff9d00;
+      }
+
+      @media (max-width: 768px) {
+        .examples-grid {
+          grid-template-columns: 1fr;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Эффекты бликов на объектах</h1>
+        <p class="subtitle">
+          Демонстрация различных способов создания бликов при наведении и
+          периодически
+        </p>
+      </header>
+
+      <div class="instructions">
+        <h2>Как использовать</h2>
+        <p>
+          Наведите курсор на объекты для активации эффектов бликов. Некоторые
+          эффекты работают автоматически.
+        </p>
+      </div>
+
+      <div class="examples-grid">
+        <!-- Пример 1 -->
+        <div class="example-card">
+          <h3 class="example-title">Блик при наведении</h3>
+          <p class="example-description">
+            Эффект скользящего блика, активируемый при наведении курсора.
+          </p>
+          <div class="demo-object demo-1">Наведи на меня</div>
+          <div class="code-block">
+            /* CSS код */ .object:hover::before { content: ''; position:
+            absolute; top: 0; left: -100%; width: 50%; height: 100%; background:
+            linear-gradient( 90deg, transparent, rgba(255,255,255,0.4),
+            transparent ); animation: shine 0.8s ease; } @keyframes shine { 0% {
+            left: -100%; } 100% { left: 100%; } }
+          </div>
+        </div>
+
+        <!-- Пример 2 -->
+        <div class="example-card">
+          <h3 class="example-title">Периодические блики</h3>
+          <p class="example-description">
+            Автоматические повторяющиеся блики без взаимодействия.
+          </p>
+          <div class="demo-object demo-2">Автоматический эффект</div>
+          <div class="code-block">
+            /* CSS код */ .object::before { content: ''; position: absolute;
+            top: 0; left: -100%; width: 50%; height: 100%; background:
+            linear-gradient( 90deg, transparent, rgba(255,255,255,0.3),
+            transparent ); animation: periodicShine 3s infinite; } @keyframes
+            periodicShine { 0%, 100% { left: -100%; } 50% { left: 100%; } }
+          </div>
+        </div>
+
+        <!-- Пример 3 -->
+        <div class="example-card">
+          <h3 class="example-title">Тонкий эффект с radial-gradient</h3>
+          <p class="example-description">
+            Плавное изменение положения светового пятна при наведении.
+          </p>
+          <div class="demo-object demo-3">Наведи на меня</div>
+          <div class="code-block">
+            /* CSS код */ .object { background: radial-gradient( circle at 30%
+            30%, rgba(255,255,255,0.2) 0%, transparent 50% ), #2c3e50;
+            transition: all 0.5s ease; } .object:hover { background:
+            radial-gradient( circle at 70% 70%, rgba(255,255,255,0.3) 0%,
+            transparent 50% ), #2c3e50; }
+          </div>
+        </div>
+
+        <!-- Пример 4 -->
+        <div class="example-card">
+          <h3 class="example-title">JavaScript контроль</h3>
+          <p class="example-description">
+            Эффекты, управляемые JavaScript (блик + пульсация).
+          </p>
+          <div class="demo-object demo-4" id="jsDemo">Наведи для блика</div>
+          <div class="code-block">
+            // JavaScript код object.addEventListener('mouseenter', () => {
+            object.classList.add('shining'); });
+            object.addEventListener('mouseleave', () => {
+            object.classList.remove('shining'); }); // Периодические пульсации
+            setInterval(() => { object.classList.add('pulse-glow');
+            setTimeout(() => { object.classList.remove('pulse-glow'); }, 1000);
+            }, 5000);
+          </div>
+        </div>
+
+        <!-- Пример 5 -->
+        <div class="example-card">
+          <h3 class="example-title">Блик для кнопки</h3>
+          <p class="example-description">
+            Эффект диагонального блика, идеально подходящий для кнопок.
+          </p>
+          <div class="demo-object demo-5">Наведи на меня</div>
+          <div class="code-block">
+            /* CSS код */ .button::after { content: ''; position: absolute; top:
+            -50%; left: -50%; width: 200%; height: 200%; background:
+            rgba(255,255,255,0.1); transform: rotate(45deg); transition: all
+            0.5s ease; opacity: 0; } .button:hover::after { opacity: 1;
+            transform: rotate(45deg) translate(50%, 50%); }
+          </div>
+        </div>
+
+        <!-- Пример 6 -->
+        <div class="example-card">
+          <h3 class="example-title">Множественные блики</h3>
+          <p class="example-description">
+            Два независимых блика с разной скоростью и задержкой.
+          </p>
+          <div class="demo-object demo-6">Автоматический эффект</div>
+          <div class="code-block">
+            /* CSS код */ .object::before, .object::after { content: '';
+            position: absolute; top: 0; left: -100%; width: 30%; height: 100%;
+            background: linear-gradient( 90deg, transparent,
+            rgba(255,255,255,0.4), transparent ); animation: multipleShine 4s
+            infinite; } .object::after { animation-delay: 1s; width: 20%; }
+            @keyframes multipleShine { 0%, 100% { left: -100%; } 50% { left:
+            100%; } }
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <p>
+          Демонстрация эффектов бликов | Создано с использованием HTML, CSS и
+          JavaScript
+        </p>
+      </footer>
+    </div>
+
+    <script>
+      // JavaScript для примера 4
+      const jsDemo = document.getElementById("jsDemo");
+
+      // Блик при наведении
+      jsDemo.addEventListener("mouseenter", () => {
+        jsDemo.classList.add("shining");
+      });
+
+      jsDemo.addEventListener("mouseleave", () => {
+        jsDemo.classList.remove("shining");
+      });
+
+      // Периодические пульсации
+      setInterval(() => {
+        jsDemo.classList.add("pulse-glow");
+        setTimeout(() => {
+          jsDemo.classList.remove("pulse-glow");
+        }, 1000);
+      }, 5000);
+    </script>
+  </body>
+</html>
